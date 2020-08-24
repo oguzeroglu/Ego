@@ -1,0 +1,43 @@
+{
+  "name": "ego-js",
+  "version": "1.0.0",
+  "description": "A lightweight decision making library for game AI.",
+  "main": "build/Ego.js",
+  "module": "build/Ego.mjs",
+  "scripts": {
+    "build": "rollup --config rollup.config.js --environment BUILD:production && minify ./build/Ego.js -o ./build/Ego.min.js",
+    "test": "npm run build && mocha test/**/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oguzeroglu/ego.git"
+  },
+  "keywords": [
+    "game-ai",
+    "decision",
+    "game-development",
+    "roygbiv"
+  ],
+  "author": "Oguz Eroglu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oguzeroglu/ego/issues"
+  },
+  "homepage": "https://github.com/oguzeroglu/ego#readme",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "babel-minify": "^0.5.1",
+    "babel-plugin-external-helpers": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-register": "^6.18.0",
+    "babelrc-rollup": "^3.0.0",
+    "eslint": "^4.1.1",
+    "expect.js": "^0.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "rollup": "^0.43.0",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-istanbul": "^1.1.0",
+    "rollup-watch": "^4.3.1"
+  }
+}
