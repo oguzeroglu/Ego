@@ -81,7 +81,8 @@ describe("Knowledge", function(){
       x: 100.9,
       y: 200.9,
       z: 300.9,
-      length: Math.sqrt((100.9 * 100.9) + (200.9 * 200.9) + (300.9 * 300.9))
+      length: Math.sqrt((100.9 * 100.9) + (200.9 * 200.9) + (300.9 * 300.9)),
+      isVector: true
     })
   });
 
@@ -129,7 +130,8 @@ describe("Knowledge", function(){
       x: 90.1,
       y: 80.2,
       z: 70.3,
-      length: Math.sqrt((90.1 * 90.1) + (80.2 * 80.2) + (70.3 * 70.3))
+      length: Math.sqrt((90.1 * 90.1) + (80.2 * 80.2) + (70.3 * 70.3)),
+      isVector: true
     });
 
     expect(knowledge.updateVectorInformation("notSpeed", 100, 200, 300)).to.eql(false);

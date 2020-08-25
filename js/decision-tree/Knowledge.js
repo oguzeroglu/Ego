@@ -45,7 +45,7 @@ Knowledge.prototype.addVectorInformation = function(name, x, y, z){
   var ySqr = parsedY * parsedY;
   var zSqr = parsedZ * parsedZ;
 
-  this._vectorMap[name] = {x: parsedX, y: parsedY, z: parsedZ, length: Math.sqrt(xSqr + ySqr + zSqr)};
+  this._vectorMap[name] = {x: parsedX, y: parsedY, z: parsedZ, length: Math.sqrt(xSqr + ySqr + zSqr), isVector: true};
   return true;
 }
 
