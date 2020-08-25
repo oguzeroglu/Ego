@@ -84,4 +84,54 @@ describe("Knowledge", function(){
       length: Math.sqrt((100.9 * 100.9) + (200.9 * 200.9) + (300.9 * 300.9))
     })
   });
+
+  it("should update boolean information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    expect(knowledge.updateBooleanInformation("isStuffHappening", false)).to.eql(true);
+
+    expect(knowledge.getBooleanInformation("isStuffHappening")).to.eql(false);
+    expect(knowledge.updateBooleanInformation("doesItWorthIt", true)).to.eql(false);
+  });
+
+  it("should update numerical information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addNumericalInformation("health", 100);
+
+    expect(knowledge.updateNumericalInformation("health", 93.7)).to.eql(true);
+
+    expect(knowledge.getNumericalInformation("health")).to.eql(93.7);
+
+    expect(knowledge.updateNumericalInformation("health", "xyz")).to.eql(false);
+    expect(knowledge.getNumericalInformation("health")).to.eql(93.7);
+
+    expect(knowledge.updateNumericalInformation("power", 94.7)).to.eql(false);
+  });
+
+  it("should update vector information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addVectorInformation("speed", 100, 200, 300);
+
+    expect(knowledge.updateVectorInformation("speed", 100)).to.eql(false);
+    expect(knowledge.updateVectorInformation("speed", 100, 200)).to.eql(false);
+    expect(knowledge.updateVectorInformation("speed", "x", "y", "z")).to.eql(false);
+
+    expect(knowledge.updateVectorInformation("speed", 90.1, 80.2, 70.3)).to.eql(true);
+
+    expect(knowledge.getVectorInformation("speed")).to.eql({
+      x: 90.1,
+      y: 80.2,
+      z: 70.3,
+      length: Math.sqrt((90.1 * 90.1) + (80.2 * 80.2) + (70.3 * 70.3))
+    });
+
+    expect(knowledge.updateVectorInformation("notSpeed", 100, 200, 300)).to.eql(false);
+  });
 });
