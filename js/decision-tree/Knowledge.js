@@ -49,6 +49,18 @@ Knowledge.prototype.addVectorInformation = function(name, x, y, z){
   return true;
 }
 
+Knowledge.prototype.getBooleanInformation = function(name){
+  return this._booleanMap[name] || null;
+}
+
+Knowledge.prototype.getNumericalInformation = function(name){
+  return this._numericalMap[name] || null;
+}
+
+Knowledge.prototype.getVectorInformation = function(name){
+  return this._vectorMap[name] || null;
+}
+
 Knowledge.prototype._hasBooleanInformation = function(name){
   return !(typeof this._booleanMap[name] === "undefined");
 }

@@ -46,4 +46,42 @@ describe("Knowledge", function(){
     expect(knowledge.addVectorInformation("speed", 20.1, 30, 70.3)).to.eql(true);
     expect(knowledge.addVectorInformation("acceleration", "x", 70, "y")).to.eql(false);
   });
+
+  it("should get boolean information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    expect(knowledge.getBooleanInformation("isStuffHappening")).to.eql(null);
+
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    expect(knowledge.getBooleanInformation("isStuffHappening")).to.eql(true);
+  });
+
+  it("should get numerical information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    expect(knowledge.getNumericalInformation("health")).to.eql(null);
+
+    knowledge.addNumericalInformation("health", 93.7);
+
+    expect(knowledge.getNumericalInformation("health")).to.eql(93.7);
+  });
+
+  it("should get vector information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    expect(knowledge.getVectorInformation("velocity")).to.eql(null);
+
+    knowledge.addVectorInformation("velocity", 100.9, 200.9, 300.9);
+
+    expect(knowledge.getVectorInformation("velocity")).to.eql({
+      x: 100.9,
+      y: 200.9,
+      z: 300.9,
+      length: Math.sqrt((100.9 * 100.9) + (200.9 * 200.9) + (300.9 * 300.9))
+    })
+  });
 });
