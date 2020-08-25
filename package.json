@@ -24,6 +24,9 @@
     "url": "https://github.com/oguzeroglu/ego/issues"
   },
   "homepage": "https://github.com/oguzeroglu/ego#readme",
+  "dependencies": {
+
+  },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "babel-minify": "^0.5.1",
