@@ -1,5 +1,5 @@
 var expect = require('expect.js');
-var Ego = require("../build/Ego");
+var Ego = require("../../build/Ego");
 
 describe("Knowledge", function(){
 
