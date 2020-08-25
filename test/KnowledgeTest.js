@@ -134,4 +134,37 @@ describe("Knowledge", function(){
 
     expect(knowledge.updateVectorInformation("notSpeed", 100, 200, 300)).to.eql(false);
   });
+
+  it("should delete boolean information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    expect(knowledge.deleteBooleanInformation("isStuffHappening")).to.eql(true);
+    expect(knowledge.getBooleanInformation("isStuffHappening")).to.eql(null);
+    expect(knowledge.deleteBooleanInformation("isStuffHappening")).to.eql(false);
+  });
+
+  it("should delete numerical information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addNumericalInformation("health", 100);
+
+    expect(knowledge.deleteNumericalInformation("health")).to.eql(true);
+    expect(knowledge.getNumericalInformation("health")).to.eql(null);
+    expect(knowledge.deleteNumericalInformation("health")).to.eql(false);
+  });
+
+  it("should delete vector information", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addVectorInformation("position", 100, 200, 300);
+
+    expect(knowledge.deleteVectorInformation("position")).to.eql(true);
+    expect(knowledge.getVectorInformation("position")).to.eql(null);
+    expect(knowledge.deleteVectorInformation("position")).to.eql(false);
+  });
 });

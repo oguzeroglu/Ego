@@ -123,6 +123,33 @@ Knowledge.prototype.updateVectorInformation = function(name, x, y, z){
   return true;
 }
 
+Knowledge.prototype.deleteBooleanInformation = function(name){
+  if (!this._hasBooleanInformation(name)){
+    return false;
+  }
+
+  delete this._booleanMap[name];
+  return true;
+}
+
+Knowledge.prototype.deleteNumericalInformation = function(name){
+  if (!this._hasNumericalInformation(name)){
+    return false;
+  }
+
+  delete this._numericalMap[name];
+  return true;
+}
+
+Knowledge.prototype.deleteVectorInformation = function(name){
+  if (!this._hasVectorInformation(name)){
+    return false;
+  }
+
+  delete this._vectorMap[name];
+  return true;
+}
+
 Knowledge.prototype._hasBooleanInformation = function(name){
   return !(typeof this._booleanMap[name] === "undefined");
 }
