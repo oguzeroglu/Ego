@@ -25,7 +25,7 @@ Decision.prototype.make = function(knowledge){
   var informationType = this._informationType;
   var informationName = this._informationName;
 
-  var information;
+  var information = null;
   if (informationType == InformationTypes.TYPE_BOOLEAN){
     information = knowledge.getBooleanInformation(informationName);
   }else if (informationType == InformationTypes.TYPE_NUMERICAL){
@@ -34,6 +34,10 @@ Decision.prototype.make = function(knowledge){
     information = knowledge.getVectorInformation(informationName);
   }else{
     throw new Error("No such information type.");
+  }
+
+  if (information == null){
+    throw new Error("No such information in knowledge: " + informationName);
   }
 
   if (this._decisionMethod.perform(information)){

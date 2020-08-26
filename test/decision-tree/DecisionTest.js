@@ -47,7 +47,7 @@ describe("Decision", function(){
     expect(decision._noNode).to.equal(decision2);
   });
 
-  it("should make - boolean information", function(){
+  it("should make given boolean information", function(){
 
     var knowledge = new Ego.Knowledge();
     knowledge.addBooleanInformation("isStuffHappening", true);
@@ -65,7 +65,7 @@ describe("Decision", function(){
     expect(decision.make(knowledge)).to.eql("no");
   });
 
-  it("should make - numerical information", function(){
+  it("should make given numerical information", function(){
 
     var knowledge = new Ego.Knowledge();
     knowledge.addNumericalInformation("health", 70);
@@ -84,7 +84,7 @@ describe("Decision", function(){
     expect(decision.make(knowledge)).to.eql("yes");
   });
 
-  it("should make - vector information", function(){
+  it("should make given vector information", function(){
 
     var knowledge = new Ego.Knowledge();
     knowledge.addVectorInformation("distance", 100, 100, 100);
@@ -123,5 +123,27 @@ describe("Decision", function(){
 
     expect(catchedErr).not.to.eql(null);
     expect(catchedErr.message).to.eql("No such information type.");
+  });
+
+  it("should throw an exception if information non existent", function(){
+
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    var decisionMethod = new Ego.IsTrue();
+    var decision = new Ego.Decision("stuff", Ego.InformationTypes.TYPE_BOOLEAN, decisionMethod);
+
+    decision.setYesNode("yes");
+    decision.setNoNode("no");
+
+    var catchedErr = null;
+    try {
+      decision.make(knowledge);
+    }catch (err){
+      catchedErr = err;
+    }
+
+    expect(catchedErr).not.to.eql(null);
+    expect(catchedErr.message).to.eql("No such information in knowledge: stuff")
   });
 });
