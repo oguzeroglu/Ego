@@ -102,4 +102,26 @@ describe("Decision", function(){
 
     expect(decision.make(knowledge)).to.eql("yes");
   });
+
+  it("should throw an exception if information type unknown", function(){
+
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    var decisionMethod = new Ego.IsTrue();
+    var decision = new Ego.Decision("isStuffHappening", Ego.InformationTypes.UNKNOWN_INFORMATION, decisionMethod);
+
+    decision.setYesNode("yes");
+    decision.setNoNode("no");
+
+    var catchedErr = null;
+    try {
+      decision.make(knowledge);
+    }catch (err){
+      catchedErr = err;
+    }
+
+    expect(catchedErr).not.to.eql(null);
+    expect(catchedErr.message).to.eql("No such information type.");
+  });
 });

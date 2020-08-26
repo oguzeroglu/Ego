@@ -30,8 +30,10 @@ Decision.prototype.make = function(knowledge){
     information = knowledge.getBooleanInformation(informationName);
   }else if (informationType == InformationTypes.TYPE_NUMERICAL){
     information = knowledge.getNumericalInformation(informationName);
-  }else{
+  }else if (informationType == InformationTypes.TYPE_VECTOR){
     information = knowledge.getVectorInformation(informationName);
+  }else{
+    throw new Error("No such information type.");
   }
 
   if (this._decisionMethod.perform(information)){
