@@ -49,4 +49,19 @@ describe("StateMachine", function(){
     expect(stateMachine2.addState(state2)).to.eql(false);
     expect(stateMachine2._statesByID).to.eql({});
   });
+
+  it("should remove state", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state = new Ego.State("idle");
+
+    expect(stateMachine.removeState(state)).to.eql(false);
+
+    stateMachine.addState(state);
+
+    expect(stateMachine.removeState(state)).to.eql(true);
+    expect(stateMachine._statesByID).to.eql({});
+  });
 });

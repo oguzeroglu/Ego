@@ -17,8 +17,16 @@ State.prototype.setParent = function(parent){
   return true;
 }
 
+State.prototype.removeParent = function(){
+  this._parent = null;
+}
+
 State.prototype.getID = function(){
   return this._id;
+}
+
+State.prototype.getParent = function(){
+  return this._parent;
 }
 
 export { State };

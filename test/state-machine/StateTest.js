@@ -26,6 +26,27 @@ describe("State", function(){
     expect(state._parent).to.eql(parent);
   });
 
+  it("should get parent", function(){
+
+    var state = new Ego.State("idle");
+    var parent = new Ego.State("parent");
+
+    state.setParent(parent);
+
+    expect(state.getParent()).to.eql(parent);
+  });
+
+  it("should removeParent", function(){
+
+    var state = new Ego.State("idle");
+    var parent = new Ego.State("parent");
+
+    state.setParent(parent);
+    state.removeParent();
+
+    expect(state.getParent()).to.eql(null);
+  });
+
   it("should get ID", function(){
 
     var state = new Ego.State("idle");

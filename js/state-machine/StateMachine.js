@@ -18,5 +18,15 @@ StateMachine.prototype.addState = function(state){
   return false;
 }
 
+StateMachine.prototype.removeState = function(state){
+  if (state.getParent() != this){
+    return false;
+  }
+
+  state.removeParent();
+  delete this._statesByID[state.getID()];
+  return true;
+}
+
 Object.defineProperty(StateMachine.prototype, 'constructor', { value: StateMachine,  enumerable: false, writable: true });
 export { StateMachine };
