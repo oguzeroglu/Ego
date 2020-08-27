@@ -36,6 +36,17 @@ describe("Decision", function(){
     expect(decision._yesNode).to.equal(decision2);
   });
 
+  it("should get yes node", function(){
+
+    var decisionMethod = new Ego.IsTrue();
+    var decision = new Ego.Decision("isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, decisionMethod);
+    var decision2 = new Ego.Decision("canSee", Ego.InformationTypes.TYPE_BOOLEAN, decisionMethod);
+
+    decision.setYesNode(decision2);
+
+    expect(decision.getYesNode()).to.equal(decision2);
+  });
+
   it("should set no node", function(){
 
     var decisionMethod = new Ego.IsTrue();
@@ -45,6 +56,17 @@ describe("Decision", function(){
     decision.setNoNode(decision2);
 
     expect(decision._noNode).to.equal(decision2);
+  });
+
+  it("should get no node", function(){
+
+    var decisionMethod = new Ego.IsTrue();
+    var decision = new Ego.Decision("isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, decisionMethod);
+    var decision2 = new Ego.Decision("canSee", Ego.InformationTypes.TYPE_BOOLEAN, decisionMethod);
+
+    decision.setNoNode(decision2);
+
+    expect(decision.getNoNode()).to.equal(decision2);
   });
 
   it("should make given boolean information", function(){

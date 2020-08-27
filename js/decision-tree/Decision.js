@@ -17,8 +17,16 @@ Decision.prototype.setYesNode = function(node){
   this._yesNode = node;
 }
 
+Decision.prototype.getYesNode = function(){
+  return this._yesNode;
+}
+
 Decision.prototype.setNoNode = function(node){
   this._noNode = node;
+}
+
+Decision.prototype.getNoNode = function(){
+  return this._noNode;
 }
 
 Decision.prototype.make = function(knowledge){
