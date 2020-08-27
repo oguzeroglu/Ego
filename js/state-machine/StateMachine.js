@@ -1,7 +1,7 @@
 import { State } from "./State";
 
-var StateMachine = function(knowledge){
-  State.call(this, null);
+var StateMachine = function(name, knowledge){
+  State.call(this, name);
 
   this._knowledge = knowledge;
   this._statesByID = {};

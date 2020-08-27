@@ -7,12 +7,12 @@ describe("StateMachine", function(){
 
     var knowledge = new Ego.Knowledge();
 
-    var stateMachine = new Ego.StateMachine(knowledge);
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
 
     expect(stateMachine instanceof Ego.State).to.eql(true);
     expect(stateMachine._knowledge).to.eql(knowledge);
     expect(stateMachine._statesByID).to.eql({});
-    expect(stateMachine._name).to.eql(null);
+    expect(stateMachine._name).to.eql("stateMachine1");
     expect(stateMachine._id).to.have.length(36);
     expect(stateMachine._parent).to.eql(null);
   });
@@ -21,8 +21,8 @@ describe("StateMachine", function(){
 
     var knowledge = new Ego.Knowledge();
 
-    var stateMachine1 = new Ego.StateMachine(knowledge);
-    var stateMachine2 = new Ego.StateMachine(knowledge);
+    var stateMachine1 = new Ego.StateMachine("stateMachine1", knowledge);
+    var stateMachine2 = new Ego.StateMachine("stateMachine1", knowledge);
 
     var state1 = new Ego.State("idle");
     var state2 = new Ego.State("idle");
