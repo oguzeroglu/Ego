@@ -5,12 +5,14 @@ var StateMachine = function(name, knowledge){
 
   this._knowledge = knowledge;
   this._statesByID = {};
+  this._transitionsByStateID = {};
 }
 StateMachine.prototype = Object.create(State.prototype);
 
 StateMachine.prototype.addState = function(state){
   if (state.setParent(this)){
     this._statesByID[state.getID()] = state;
+    this._transitionsByStateID[state.getID()] = [];
 
     return true;
   }
@@ -25,6 +27,7 @@ StateMachine.prototype.removeState = function(state){
 
   state.removeParent();
   delete this._statesByID[state.getID()];
+  delete this._transitionsByStateID[state.getID()];
   return true;
 }
 
