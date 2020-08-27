@@ -108,4 +108,44 @@ describe("StateMachine", function(){
     expect(stateMachine.addTransition(transition3)).to.eql(true);
     expect(stateMachine._transitionsByStateID).to.eql(obj);
   });
+
+  it("should remove transition", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state1 = new Ego.State("idle");
+    var state2 = new Ego.State("moving");
+    var state3 = new Ego.State("jumping");
+
+    var transition1 = new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+    var transition2 = new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+    var transition3 = new Ego.Transition(state1, state3, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+
+    stateMachine.addState(state1);
+
+    expect(stateMachine.removeTransition(transition1)).to.eql(false);
+    expect(stateMachine.removeTransition(transition2)).to.eql(false);
+    expect(stateMachine.removeTransition(transition3)).to.eql(false);
+
+    stateMachine.addTransition(transition1);
+    stateMachine.addTransition(transition3);
+
+    var obj = {};
+    obj[state1.getID()] = [transition3];
+
+    expect(stateMachine.removeTransition(transition1)).to.eql(true);
+    expect(stateMachine._transitionsByStateID).to.eql(obj);
+
+    stateMachine.addTransition(transition1);
+    obj = {};
+    obj[state1.getID()] = [transition1];
+    expect(stateMachine.removeTransition(transition3)).to.eql(true);
+    expect(stateMachine._transitionsByStateID).to.eql(obj);
+
+    obj = {};
+    obj[state1.getID()] = [];
+    expect(stateMachine.removeTransition(transition1)).to.eql(true);
+    expect(stateMachine._transitionsByStateID).to.eql(obj);
+  });
 });

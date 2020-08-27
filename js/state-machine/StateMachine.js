@@ -41,14 +41,37 @@ StateMachine.prototype.addTransition = function(transition){
     for (var i = 0; i < existingTransitions.length; i ++){
       var existingTransition = existingTransitions[i];
 
-      if (existingTransition.getSourceNode() == sourceNode){
-        if (existingTransition.getTargetNode() == transition.getTargetNode()){
-          return false;
-        }
+      if (existingTransition.getTargetNode() == transition.getTargetNode()){
+        return false;
       }
     }
 
     existingTransitions.push(transition);
+    return true;
+  }
+
+  return false;
+}
+
+StateMachine.prototype.removeTransition = function(transition){
+  var sourceNode = transition.getSourceNode();
+
+  if (sourceNode.getParent() == this){
+    var transitions = this._transitionsByStateID[sourceNode.getID()];
+
+    var index = null;
+    for (var i = 0; i < transitions.length; i ++){
+      if (transitions[i].getTargetNode() == transition.getTargetNode()){
+        index = i;
+        break;
+      }
+    }
+
+    if (index == null){
+      return false;
+    }
+
+    transitions.splice(index, 1);
     return true;
   }
 
