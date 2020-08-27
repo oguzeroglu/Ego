@@ -7,4 +7,18 @@ var State = function(name){
   this._parent = null;
 }
 
+State.prototype.setParent = function(parent){
+
+  if (this._parent){
+    return false;
+  }
+
+  this._parent = parent;
+  return true;
+}
+
+State.prototype.getID = function(){
+  return this._id;
+}
+
 export { State };

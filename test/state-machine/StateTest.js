@@ -11,4 +11,26 @@ describe("State", function(){
     expect(state._id).to.have.length(36);
     expect(state._parent).to.eql(null);
   });
+
+  it("should set parent", function(){
+
+    var state = new Ego.State("idle");
+    var parent = new Ego.State("parent");
+
+    expect(state.setParent(parent)).to.eql(true);
+    expect(state._parent).to.eql(parent);
+
+    var parent2 = new Ego.State("parent2");
+
+    expect(state.setParent(parent2)).to.eql(false);
+    expect(state._parent).to.eql(parent);
+  });
+
+  it("should get ID", function(){
+
+    var state = new Ego.State("idle");
+
+    expect(state.getID()).to.eql(state._id);
+    expect(state.getID()).to.have.length(36);
+  });
 });
