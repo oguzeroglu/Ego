@@ -489,13 +489,138 @@ describe("StateMachine", function(){
 
   it("should not invoke state change callback function on cross-hierarchy transitions", function(){
 
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("seenTrash", false);
+
+    var childStateMachine = new Ego.StateMachine("childStateMachine", knowledge);
+    var parentStateMachine = new Ego.StateMachine("parentStateMachine", knowledge);
+
+    var state1 = new Ego.State("search");
+    var state2 = new Ego.State("headForTrash");
+    var state3 = new Ego.State("getPower");
+
+    childStateMachine.addState(state1);
+    childStateMachine.addState(state2);
+    childStateMachine.setEntryState(state1);
+
+    parentStateMachine.addState(childStateMachine);
+    parentStateMachine.addState(state3);
+    parentStateMachine.setEntryState(childStateMachine);
+
+    childStateMachine.addTransition(new Ego.Transition(state1, state2, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+    childStateMachine.addTransition(new Ego.Transition(state1, state3, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsFalse()));
+
+    var callCount = 0;
+    var lastState = null;
+    childStateMachine.onStateChanged(function(newState){
+      callCount ++;
+      lastState = newState;
+    });
+
+    parentStateMachine.update();
+
+    expect(callCount).to.eql(1);
+    expect(lastState).to.eql(state1);
   });
 
   it("should update the current node of the other state machine on cross-hierarchy transitions", function(){
 
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("seenTrash", false);
+
+    var childStateMachine = new Ego.StateMachine("childStateMachine", knowledge);
+    var parentStateMachine = new Ego.StateMachine("parentStateMachine", knowledge);
+
+    var state1 = new Ego.State("search");
+    var state2 = new Ego.State("headForTrash");
+    var state3 = new Ego.State("getPower");
+
+    childStateMachine.addState(state1);
+    childStateMachine.addState(state2);
+    childStateMachine.setEntryState(state1);
+
+    parentStateMachine.addState(childStateMachine);
+    parentStateMachine.addState(state3);
+    parentStateMachine.setEntryState(childStateMachine);
+
+    childStateMachine.addTransition(new Ego.Transition(state1, state2, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+    childStateMachine.addTransition(new Ego.Transition(state1, state3, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsFalse()));
+
+    var states = [];
+    parentStateMachine.onStateChanged(function(newState){
+      states.push(newState);
+    });
+
+    parentStateMachine.update();
+
+    expect(parentStateMachine._currentState).to.eql(state3);
+    expect(states).to.eql([childStateMachine, state3]);
   });
 
   it("should reset on cross-hierarchy transitions", function(){
 
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("seenTrash", false);
+
+    var childStateMachine = new Ego.StateMachine("childStateMachine", knowledge);
+    var parentStateMachine = new Ego.StateMachine("parentStateMachine", knowledge);
+
+    var state1 = new Ego.State("search");
+    var state2 = new Ego.State("headForTrash");
+    var state3 = new Ego.State("getPower");
+
+    childStateMachine.addState(state1);
+    childStateMachine.addState(state2);
+    childStateMachine.setEntryState(state1);
+
+    parentStateMachine.addState(childStateMachine);
+    parentStateMachine.addState(state3);
+    parentStateMachine.setEntryState(childStateMachine);
+
+    childStateMachine.addTransition(new Ego.Transition(state1, state2, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+    childStateMachine.addTransition(new Ego.Transition(state1, state3, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsFalse()));
+
+    var stateChanged = false;
+    childStateMachine.onStateChanged(function(state){
+      stateChanged = true;
+    });
+
+    parentStateMachine.update();
+
+    expect(stateChanged).to.eql(true);
+    expect(childStateMachine._currentState).to.eql(null);
+  });
+
+  it("should keep updating the switched state machine after cross-hierarchy transition", function(){
+
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("seenTrash", false);
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    var childStateMachine = new Ego.StateMachine("childStateMachine", knowledge);
+    var parentStateMachine = new Ego.StateMachine("parentStateMachine", knowledge);
+
+    var state1 = new Ego.State("search");
+    var state2 = new Ego.State("headForTrash");
+    var state3 = new Ego.State("getPower");
+    var state4 = new Ego.State("doStuff");
+
+    childStateMachine.addState(state1);
+    childStateMachine.addState(state2);
+    childStateMachine.setEntryState(state1);
+
+    parentStateMachine.addState(childStateMachine);
+    parentStateMachine.addState(state3);
+    parentStateMachine.addState(state4);
+    parentStateMachine.setEntryState(childStateMachine);
+
+    childStateMachine.addTransition(new Ego.Transition(state1, state2, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+    childStateMachine.addTransition(new Ego.Transition(state1, state3, "seenTrash", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsFalse()));
+
+    parentStateMachine.addTransition(new Ego.Transition(state3, state4, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+
+    parentStateMachine.update();
+
+    expect(parentStateMachine._currentState).to.eql(state4);
   });
 });

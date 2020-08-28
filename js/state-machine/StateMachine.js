@@ -107,7 +107,8 @@ StateMachine.prototype.reset = function(){
 }
 
 StateMachine.prototype.onCrossHierarchyTransition = function(node){
-
+  this._changeState(node);
+  this.update();
 }
 
 StateMachine.prototype._onNewState = function(newState){
