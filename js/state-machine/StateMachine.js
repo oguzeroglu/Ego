@@ -102,6 +102,14 @@ StateMachine.prototype.onStateChanged = function(callbackFunction){
   this._stateChangedCallbackFunction = callbackFunction;
 }
 
+StateMachine.prototype.reset = function(){
+  
+}
+
+StateMachine.prototype.onCrossHierarchyTransition = function(node){
+
+}
+
 StateMachine.prototype._onNewState = function(newState){
   if (this._stateChangedCallbackFunction){
     this._stateChangedCallbackFunction(newState);
@@ -124,9 +132,19 @@ StateMachine.prototype.update = function(){
 
   var knowledge = this._knowledge;
   for (var i = 0; i < transitions.length; i ++){
+    var transition = transitions[i];
     if (transition.isPossible(knowledge)){
-      this._currentState = transition.getTargetNode();
-      isStateChanged = true;
+      var targetNode = transition.getTargetNode();
+      var targetParent = targetNode.getParent();
+
+      if (targetParent == this){
+        this._currentState = transition.getTargetNode();
+        isStateChanged = true;
+      }else{
+        targetParent.onCrossHierarchyTransition(targetNode);
+        this.reset();
+      }
+
       break;
     }
   }

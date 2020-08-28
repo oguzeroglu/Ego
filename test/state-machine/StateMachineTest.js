@@ -218,13 +218,63 @@ describe("StateMachine", function(){
 
   it("should update", function(){
 
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("isStuffHappening", false);
+
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state1 = new Ego.State("idle");
+    var state2 = new Ego.State("moving");
+
+    stateMachine.addState(state1);
+    stateMachine.addState(state2);
+
+    stateMachine.addTransition(new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+
+    stateMachine.setEntryState(state1);
+
+    expect(stateMachine._currentState).to.eql(null);
+
+    stateMachine.update();
+
+    expect(stateMachine._currentState).to.eql(state1);
+
+    knowledge.updateBooleanInformation("isStuffHappening", true);
+
+    stateMachine.update();
+
+    expect(stateMachine._currentState).to.eql(state2);
+
+    stateMachine.update();
+
+    expect(stateMachine._currentState).to.eql(state2);
   });
 
   it("should invoke state change callback function", function(){
 
   });
 
+  it("should update recursively", function(){
+
+  });
+
+  it("should invoke state change callback function on recursive updates", function(){
+
+  });
+
   it("should update hierarchically", function(){
+
+  });
+
+  it("should not invoke state change callback function on cross-hierarchy transitions", function(){
+
+  });
+
+  it("should update the current node of the other state machine on cross-hierarchy transitions", function(){
+
+  });
+
+  it("should reset on cross-hierarchy transitions", function(){
 
   });
 });
