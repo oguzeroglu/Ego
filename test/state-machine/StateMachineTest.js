@@ -13,6 +13,7 @@ describe("StateMachine", function(){
     expect(stateMachine._knowledge).to.eql(knowledge);
     expect(stateMachine._statesByID).to.eql({});
     expect(stateMachine._transitionsByStateID).to.eql({});
+    expect(stateMachine._entryState).to.eql(null);
     expect(stateMachine._name).to.eql("stateMachine1");
     expect(stateMachine._id).to.have.length(36);
     expect(stateMachine._parent).to.eql(null);
@@ -147,5 +148,21 @@ describe("StateMachine", function(){
     obj[state1.getID()] = [];
     expect(stateMachine.removeTransition(transition1)).to.eql(true);
     expect(stateMachine._transitionsByStateID).to.eql(obj);
+  });
+
+  it("should set entry state", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state1 = new Ego.State("moving");
+
+    expect(stateMachine.setEntryState(state1)).to.eql(false);
+    expect(stateMachine._entryState).to.eql(null);
+
+    stateMachine.addState(state1);
+
+    expect(stateMachine.setEntryState(state1)).to.eql(true);
+    expect(stateMachine._entryState).to.eql(state1);
   });
 });

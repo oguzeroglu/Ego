@@ -6,6 +6,8 @@ var StateMachine = function(name, knowledge){
   this._knowledge = knowledge;
   this._statesByID = {};
   this._transitionsByStateID = {};
+
+  this._entryState = null;
 }
 StateMachine.prototype = Object.create(State.prototype);
 
@@ -76,6 +78,15 @@ StateMachine.prototype.removeTransition = function(transition){
   }
 
   return false;
+}
+
+StateMachine.prototype.setEntryState = function(state){
+  if (!this._statesByID[state.getID()]){
+    return false;
+  }
+
+  this._entryState = state;
+  return true;
 }
 
 Object.defineProperty(StateMachine.prototype, 'constructor', { value: StateMachine,  enumerable: false, writable: true });
