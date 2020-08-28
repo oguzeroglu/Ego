@@ -138,6 +138,11 @@ StateMachine.prototype._getNextState = function(currentState){
 }
 
 StateMachine.prototype._changeState = function(newState){
+
+  if (this._currentState && this._currentState instanceof StateMachine){
+    this._currentState.reset();
+  }
+
   this._currentState = newState;
 
   this._onNewState(newState);
@@ -169,6 +174,10 @@ StateMachine.prototype.update = function(){
     }
 
     transition = this._getNextState(this._currentState);
+  }
+
+  if (this._currentState instanceof StateMachine){
+    this._currentState.update();
   }
 }
 
