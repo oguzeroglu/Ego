@@ -29,4 +29,8 @@ State.prototype.getParent = function(){
   return this._parent;
 }
 
+State.prototype.getName = function(){
+  return this._name;
+}
+
 export { State };

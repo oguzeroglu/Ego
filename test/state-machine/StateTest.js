@@ -54,4 +54,11 @@ describe("State", function(){
     expect(state.getID()).to.eql(state._id);
     expect(state.getID()).to.have.length(36);
   });
+
+  it("should get name", function(){
+
+    var state = new Ego.State("testState");
+
+    expect(state.getName()).to.eql("testState");
+  });
 });
