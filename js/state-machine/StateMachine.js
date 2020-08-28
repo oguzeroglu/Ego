@@ -27,6 +27,10 @@ StateMachine.prototype.removeState = function(state){
     return false;
   }
 
+  if (this._entryState && this._entryState.getID() == state.getID()){
+    this._entryState = null;
+  }
+
   state.removeParent();
   delete this._statesByID[state.getID()];
   delete this._transitionsByStateID[state.getID()];

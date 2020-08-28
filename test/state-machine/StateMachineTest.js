@@ -165,4 +165,21 @@ describe("StateMachine", function(){
     expect(stateMachine.setEntryState(state1)).to.eql(true);
     expect(stateMachine._entryState).to.eql(state1);
   });
+
+  it("should unset entry state if the removed state is the entry state", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state = new Ego.State("idle");
+
+    stateMachine.addState(state);
+    stateMachine.setEntryState(state);
+
+    expect(stateMachine._entryState).to.eql(state);
+
+    stateMachine.removeState(state);
+
+    expect(stateMachine._entryState).to.eql(null);
+  });
 });
