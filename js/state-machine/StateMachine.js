@@ -116,44 +116,59 @@ StateMachine.prototype._onNewState = function(newState){
   }
 }
 
+StateMachine.prototype._getNextState = function(currentState){
+
+  if (currentState == null){
+    return null;
+  }
+
+  var transitions = this._transitionsByStateID[currentState.getID()];
+
+  var knowledge = this._knowledge;
+
+  for (var i = 0; i < transitions.length; i ++){
+    var transition = transitions[i];
+
+    if (transition.isPossible(knowledge)){
+      return transition;
+    }
+  }
+
+  return null;
+}
+
+StateMachine.prototype._changeState = function(newState){
+  this._currentState = newState;
+
+  this._onNewState(newState);
+  if (newState instanceof StateMachine){
+    newState.update();
+  }
+}
+
 StateMachine.prototype.update = function(){
   if (!this._entryState){
     throw new Error("Entry state not set. Cannot update the StateMachine.");
   }
 
-  var isStateChanged = false;
-
   if (!this._currentState){
-    this._currentState = this._entryState;
-    isStateChanged = true;
+    this._changeState(this._entryState);
   }
 
-  var transitions = this._transitionsByStateID[this._currentState.getID()];
+  var transition = this._getNextState(this._currentState);
 
-  var knowledge = this._knowledge;
-  for (var i = 0; i < transitions.length; i ++){
-    var transition = transitions[i];
-    if (transition.isPossible(knowledge)){
-      var targetNode = transition.getTargetNode();
-      var targetParent = targetNode.getParent();
+  while (transition){
+    var targetNode = transition.getTargetNode();
+    var targetParent = targetNode.getParent();
 
-      if (targetParent == this){
-        this._currentState = transition.getTargetNode();
-        isStateChanged = true;
-      }else{
-        targetParent.onCrossHierarchyTransition(targetNode);
-        this.reset();
-      }
-
-      break;
+    if (targetParent == this){
+      this._changeState(transition.getTargetNode());
+    }else{
+      targetParent.onCrossHierarchyTransition(targetNode);
+      this.reset();
     }
-  }
 
-  if (isStateChanged){
-    this._onNewState(this._currentState);
-    if (this._currentState instanceof StateMachine){
-      this._currentState.update();
-    }
+    transition = this._getNextState(this._currentState);
   }
 }
 

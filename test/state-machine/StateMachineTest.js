@@ -316,10 +316,66 @@ describe("StateMachine", function(){
 
   it("should update recursively", function(){
 
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("isStuffHappening", true);
+    knowledge.addBooleanInformation("shouldJump", true);
+
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state1 = new Ego.State("idle");
+    var state2 = new Ego.State("moving");
+    var state3 = new Ego.State("jumping");
+
+    stateMachine.addState(state1);
+    stateMachine.addState(state2);
+    stateMachine.addState(state3);
+
+    stateMachine.addTransition(new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+    stateMachine.addTransition(new Ego.Transition(state2, state3, "shouldJump", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+
+    stateMachine.setEntryState(state1);
+
+    stateMachine.update();
+
+    expect(stateMachine._currentState).to.eql(state3);
+
+    stateMachine.reset();
+    knowledge.updateBooleanInformation("shouldJump", false);
+
+    stateMachine.update();
+
+    expect(stateMachine._currentState).to.eql(state2);
   });
 
   it("should invoke state change callback function on recursive updates", function(){
 
+    var knowledge = new Ego.Knowledge();
+    knowledge.addBooleanInformation("isStuffHappening", true);
+    knowledge.addBooleanInformation("shouldJump", true);
+
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state1 = new Ego.State("idle");
+    var state2 = new Ego.State("moving");
+    var state3 = new Ego.State("jumping");
+
+    stateMachine.addState(state1);
+    stateMachine.addState(state2);
+    stateMachine.addState(state3);
+
+    stateMachine.addTransition(new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+    stateMachine.addTransition(new Ego.Transition(state2, state3, "shouldJump", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue()));
+
+    stateMachine.setEntryState(state1);
+
+    var currentStates = [];
+    stateMachine.onStateChanged(function(newState){
+      currentStates.push(newState);
+    });
+
+    stateMachine.update();
+
+    expect(currentStates).to.eql([state1, state2, state3]);
   });
 
   it("should update hierarchically", function(){
