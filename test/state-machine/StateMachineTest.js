@@ -14,6 +14,8 @@ describe("StateMachine", function(){
     expect(stateMachine._statesByID).to.eql({});
     expect(stateMachine._transitionsByStateID).to.eql({});
     expect(stateMachine._entryState).to.eql(null);
+    expect(stateMachine._currentState).to.eql(null);
+    expect(stateMachine._stateChangedCallbackFunction).to.eql(null);
     expect(stateMachine._name).to.eql("stateMachine1");
     expect(stateMachine._id).to.have.length(36);
     expect(stateMachine._parent).to.eql(null);
@@ -181,5 +183,48 @@ describe("StateMachine", function(){
     stateMachine.removeState(state);
 
     expect(stateMachine._entryState).to.eql(null);
+  });
+
+  it("should set state change callback function", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var fn = function(newState){
+      console.log("State changed: ", newState);
+    };
+
+    stateMachine.onStateChanged(fn);
+
+    expect(stateMachine._stateChangedCallbackFunction).to.eql(fn);
+  });
+
+  it("should throw an error if updating without an entry state", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var catched = null;
+
+    try{
+      stateMachine.update();
+    }catch (err){
+      catched = err;
+    }
+
+    expect(catched).not.to.eql(null);
+    expect(catched.message).to.eql("Entry state not set. Cannot update the StateMachine.");
+  });
+
+  it("should update", function(){
+
+  });
+
+  it("should invoke state change callback function", function(){
+
+  });
+
+  it("should update hierarchically", function(){
+
   });
 });

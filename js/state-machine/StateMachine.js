@@ -7,8 +7,13 @@ var StateMachine = function(name, knowledge){
   this._statesByID = {};
   this._transitionsByStateID = {};
 
+  this._stateChangedCallbackFunction = null;
+
   this._entryState = null;
+
+  this._currentState = null;
 }
+
 StateMachine.prototype = Object.create(State.prototype);
 
 StateMachine.prototype.addState = function(state){
@@ -91,6 +96,47 @@ StateMachine.prototype.setEntryState = function(state){
 
   this._entryState = state;
   return true;
+}
+
+StateMachine.prototype.onStateChanged = function(callbackFunction){
+  this._stateChangedCallbackFunction = callbackFunction;
+}
+
+StateMachine.prototype._onNewState = function(newState){
+  if (this._stateChangedCallbackFunction){
+    this._stateChangedCallbackFunction(newState);
+  }
+}
+
+StateMachine.prototype.update = function(){
+  if (!this._entryState){
+    throw new Error("Entry state not set. Cannot update the StateMachine.");
+  }
+
+  var isStateChanged = false;
+
+  if (!this._currentState){
+    this._currentState = this._entryState;
+    isStateChanged = true;
+  }
+
+  var transitions = this._transitionsByStateID[this._currentState.getID()];
+
+  var knowledge = this._knowledge;
+  for (var i = 0; i < transitions.length; i ++){
+    if (transition.isPossible(knowledge)){
+      this._currentState = transition.getTargetNode();
+      isStateChanged = true;
+      break;
+    }
+  }
+
+  if (isStateChanged){
+    this._onNewState(this._currentState);
+    if (this._currentState instanceof StateMachine){
+      this._currentState.update();
+    }
+  }
 }
 
 Object.defineProperty(StateMachine.prototype, 'constructor', { value: StateMachine,  enumerable: false, writable: true });
