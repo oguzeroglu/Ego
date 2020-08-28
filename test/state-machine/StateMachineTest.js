@@ -623,4 +623,29 @@ describe("StateMachine", function(){
 
     expect(parentStateMachine._currentState).to.eql(state4);
   });
+
+  it("should throw an error if trying to remove the active state", function(){
+
+    var knowledge = new Ego.Knowledge();
+    var stateMachine = new Ego.StateMachine("stateMachine1", knowledge);
+
+    var state = new Ego.State("state1");
+
+    stateMachine.addState(state);
+    stateMachine.setEntryState(state);
+
+    stateMachine.update();
+
+    expect(stateMachine._currentState).to.eql(state);
+
+    var thrownError = null
+    try{
+      stateMachine.removeState(state);
+    }catch (err){
+      thrownError = err;
+    }
+
+    expect(thrownError).not.to.eql(null);
+    expect(thrownError.message).to.eql("Cannot remove the active state.");
+  });
 });

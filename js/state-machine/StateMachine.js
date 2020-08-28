@@ -32,6 +32,10 @@ StateMachine.prototype.removeState = function(state){
     return false;
   }
 
+  if (this._currentState && this._currentState.getID() == state.getID()){
+    throw new Error("Cannot remove the active state.");
+  }
+
   if (this._entryState && this._entryState.getID() == state.getID()){
     this._entryState = null;
   }
