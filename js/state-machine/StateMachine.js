@@ -151,9 +151,6 @@ StateMachine.prototype._changeState = function(newState){
   this._currentState = newState;
 
   this._onNewState(newState);
-  if (newState instanceof StateMachine){
-    newState.update();
-  }
 }
 
 StateMachine.prototype.update = function(){

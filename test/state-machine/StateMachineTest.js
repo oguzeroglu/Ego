@@ -648,4 +648,206 @@ describe("StateMachine", function(){
     expect(thrownError).not.to.eql(null);
     expect(thrownError.message).to.eql("Cannot remove the active state.");
   });
+
+  describe("integration", function(){
+
+    it("case#1", function(){
+
+      var isTrue = new Ego.IsTrue();
+
+      var knowledge = new Ego.Knowledge();
+      knowledge.addBooleanInformation("info1", false);
+      knowledge.addBooleanInformation("info2", false);
+      knowledge.addBooleanInformation("info3", false);
+      knowledge.addBooleanInformation("info4", false);
+      knowledge.addBooleanInformation("info5", false);
+
+      var state1 = new Ego.State("state1");
+      var state2 = new Ego.State("state2");
+      var state3 = new Ego.State("state3");
+      var state4 = new Ego.State("state4");
+      var state5 = new Ego.State("state5");
+
+      var stateMachine1 = new Ego.StateMachine("stateMachine1", knowledge);
+      var stateMachine2 = new Ego.StateMachine("stateMachine2", knowledge);
+      var stateMachine3 = new Ego.StateMachine("stateMachine3", knowledge);
+
+      stateMachine1.addState(stateMachine2);
+      stateMachine1.addState(state3);
+      stateMachine1.addTransition(new Ego.Transition(stateMachine2, state3, "info2", Ego.InformationTypes.TYPE_BOOLEAN, isTrue));
+      stateMachine1.setEntryState(stateMachine2);
+
+      stateMachine2.addState(state1);
+      stateMachine2.addState(state2);
+      stateMachine2.addTransition(new Ego.Transition(state1, state2, "info1", Ego.InformationTypes.TYPE_BOOLEAN, isTrue));
+      stateMachine2.addTransition(new Ego.Transition(state2, state4, "info3", Ego.InformationTypes.TYPE_BOOLEAN, isTrue));
+      stateMachine2.setEntryState(state1);
+
+      stateMachine3.addState(stateMachine1);
+      stateMachine3.addState(state4);
+      stateMachine3.addState(state5);
+      stateMachine3.addTransition(new Ego.Transition(state4, state5, "info4", Ego.InformationTypes.TYPE_BOOLEAN, isTrue));
+      stateMachine3.addTransition(new Ego.Transition(state5, stateMachine1, "info5", Ego.InformationTypes.TYPE_BOOLEAN, isTrue));
+      stateMachine3.setEntryState(stateMachine1);
+
+      stateMachine3.update();
+
+      expect(stateMachine3._currentState).to.eql(stateMachine1);
+      expect(stateMachine1._currentState).to.eql(stateMachine2);
+      expect(stateMachine2._currentState).to.eql(state1);
+
+      knowledge.updateBooleanInformation("info1", true);
+
+      stateMachine3.update();
+
+      expect(stateMachine3._currentState).to.eql(stateMachine1);
+      expect(stateMachine1._currentState).to.eql(stateMachine2);
+      expect(stateMachine2._currentState).to.eql(state2);
+
+      knowledge.updateBooleanInformation("info3", true);
+
+      stateMachine3.update();
+
+      expect(stateMachine3._currentState).to.eql(state4);
+      expect(stateMachine1._currentState).to.eql(null);
+      expect(stateMachine2._currentState).to.eql(null);
+
+      knowledge.updateBooleanInformation("info4", true);
+
+      stateMachine3.update();
+      expect(stateMachine3._currentState).to.eql(state5);
+      expect(stateMachine1._currentState).to.eql(null);
+      expect(stateMachine2._currentState).to.eql(null);
+
+      knowledge.updateBooleanInformation("info5", true);
+      knowledge.updateBooleanInformation("info2", true);
+
+      stateMachine3.update();
+      expect(stateMachine3._currentState).to.eql(stateMachine1);
+      expect(stateMachine1._currentState).to.eql(state3);
+      expect(stateMachine2._currentState).to.eql(null);
+    });
+
+    it("case#2", function(){
+
+      var isTrue = new Ego.IsTrue();
+
+      var knowledge = new Ego.Knowledge();
+      knowledge.addBooleanInformation("info1", false);
+      knowledge.addBooleanInformation("info2", false);
+      knowledge.addBooleanInformation("info3", false);
+      knowledge.addBooleanInformation("info4", false);
+      knowledge.addBooleanInformation("info5", false);
+      knowledge.addBooleanInformation("info6", false);
+      knowledge.addBooleanInformation("info7", false);
+      knowledge.addBooleanInformation("info8", false);
+      knowledge.addBooleanInformation("info9", false);
+      knowledge.addBooleanInformation("info10", false);
+
+      var state1 = new Ego.State("state1");
+      var state2 = new Ego.State("state2");
+      var state3 = new Ego.State("state3");
+      var state4 = new Ego.State("state4");
+      var state5 = new Ego.State("state5");
+      var state6 = new Ego.State("state6");
+      var state7 = new Ego.State("state7");
+
+      var sm1 = new Ego.StateMachine("sm1", knowledge);
+      var sm2 = new Ego.StateMachine("sm2", knowledge);
+      var sm3 = new Ego.StateMachine("sm3", knowledge);
+
+      var transition1 = new Ego.Transition(state1, state2, "info1", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition2 = new Ego.Transition(state2, state4, "info2", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition3 = new Ego.Transition(state2, state3, "info3", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition4 = new Ego.Transition(state3, sm2, "info4", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition5 = new Ego.Transition(state6, state7, "info5", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition6 = new Ego.Transition(state7, state4, "info6", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition7 = new Ego.Transition(state4, state5, "info7", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition8 = new Ego.Transition(state5, sm1, "info8", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition9 = new Ego.Transition(sm1, sm2, "info9", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+      var transition10 = new Ego.Transition(sm2, sm1, "info10", Ego.InformationTypes.TYPE_BOOLEAN, isTrue);
+
+      sm1.addState(state1);
+      sm1.addState(state2);
+      sm1.addState(state3);
+      sm1.addTransition(transition1);
+      sm1.addTransition(transition2);
+      sm1.addTransition(transition3);
+      sm1.addTransition(transition4);
+      sm1.setEntryState(state1);
+
+      sm2.addState(state6);
+      sm2.addState(state7);
+      sm2.addTransition(transition5);
+      sm2.addTransition(transition6);
+      sm2.setEntryState(state6);
+
+      sm3.addState(sm1);
+      sm3.addState(sm2);
+      sm3.addState(state4);
+      sm3.addState(state5);
+      sm3.addTransition(transition9);
+      sm3.addTransition(transition10);
+      sm3.addTransition(transition7);
+      sm3.addTransition(transition8);
+      sm3.setEntryState(sm1);
+
+      sm3.update();
+      expect(sm3._currentState).to.eql(sm1);
+      expect(sm1._currentState).to.eql(state1);
+      expect(sm2._currentState).to.eql(null);
+
+      knowledge.updateBooleanInformation("info9", true);
+
+      sm3.update();
+      expect(sm3._currentState).to.eql(sm2);
+      expect(sm1._currentState).to.eql(null);
+      expect(sm2._currentState).to.eql(state6);
+
+      knowledge.updateBooleanInformation("info9", false);
+      knowledge.updateBooleanInformation("info10", true);
+
+      sm3.update();
+      expect(sm3._currentState).to.eql(sm1);
+      expect(sm1._currentState).to.eql(state1);
+      expect(sm2._currentState).to.eql(null);
+
+      knowledge.updateBooleanInformation("info10", false);
+      knowledge.updateBooleanInformation("info9", true);
+      knowledge.updateBooleanInformation("info5", true);
+      knowledge.updateBooleanInformation("info6", true);
+      knowledge.updateBooleanInformation("info7", true);
+
+      sm3.update();
+      expect(sm3._currentState).to.eql(state5);
+      expect(sm1._currentState).to.eql(null);
+      expect(sm2._currentState).to.eql(null);
+
+      knowledge.updateBooleanInformation("info7", false);
+      knowledge.updateBooleanInformation("info8", true);
+      knowledge.updateBooleanInformation("info1", true);
+      knowledge.updateBooleanInformation("info2", true);
+
+      sm3.update();
+      expect(sm3._currentState).to.eql(state4);
+      expect(sm1._currentState).to.eql(null);
+      expect(sm2._currentState).to.eql(null);
+
+      knowledge.updateBooleanInformation("info1", false);
+      knowledge.updateBooleanInformation("info2", false);
+      knowledge.updateBooleanInformation("info3", false);
+      knowledge.updateBooleanInformation("info4", false);
+      knowledge.updateBooleanInformation("info5", true);
+      knowledge.updateBooleanInformation("info6", false);
+      knowledge.updateBooleanInformation("info7", true);
+      knowledge.updateBooleanInformation("info8", true);
+      knowledge.updateBooleanInformation("info9", true);
+      knowledge.updateBooleanInformation("info10", false);
+
+      sm3.update();
+      expect(sm3._currentState).to.eql(sm2);
+      expect(sm1._currentState).to.eql(null);
+      expect(sm2._currentState).to.eql(state7);
+    });
+  });
 });
