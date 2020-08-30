@@ -1,5 +1,5 @@
 {
-  "name": "ego-js",
+  "name": "@oguz.eroglu/ego-js",
   "version": "1.0.0",
   "description": "A lightweight decision making library for game AI.",
   "main": "build/Ego.js",
