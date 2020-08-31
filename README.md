@@ -49,7 +49,7 @@ var Ego = require("@oguz.eroglu/ego-js");
 
 To get started with decision trees, let's create this decision tree with Ego:
 
-[[https://github.com/oguzeroglu/Ego/blob/master/example-images/decision-tree.png|alt=decision-tree]]
+![](/example-images/decision-tree.png?raw=true)  
 
 ### Creating the Knowledge
 
@@ -229,7 +229,7 @@ console.log(decisionTree.makeDecision(knowledge));
 
 To get started with state machines, let's create this state machine with Ego:
 
-[[https://github.com/oguzeroglu/Ego/blob/master/example-images/simple-state-machine.png|alt=simple-state-machine]]
+![](/example-images/simple-state-machine.png?raw=true) 
 
 ### Creating the Knowledge
 
