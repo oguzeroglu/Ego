@@ -171,7 +171,9 @@ StateMachine.prototype.update = function(){
     if (targetParent == this){
       this._changeState(transition.getTargetNode());
     }else{
-      targetParent.onCrossHierarchyTransition(targetNode);
+      if (targetParent != null){
+        targetParent.onCrossHierarchyTransition(targetNode);
+      }
       this.reset();
     }
 

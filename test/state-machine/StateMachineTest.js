@@ -649,6 +649,34 @@ describe("StateMachine", function(){
     expect(thrownError.message).to.eql("Cannot remove the active state.");
   });
 
+  it("should not crash if target node has no parent", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addBooleanInformation("isStuffHappening", true);
+
+    var state1 = new Ego.State("state1");
+    var state2 = new Ego.State("state2");
+
+    var transition = new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+
+    var stateMachine = new Ego.StateMachine("sm1", knowledge);
+
+    stateMachine.addState(state1);
+    stateMachine.setEntryState(state1);
+    stateMachine.addTransition(transition);
+
+    var stateChangeCount = 0;
+    stateMachine.onStateChanged(function(state){
+      stateChangeCount++;
+    });
+
+    stateMachine.update();
+
+    expect(stateChangeCount).to.eql(1);
+    expect(stateMachine._currentState).to.eql(null);
+  });
+
   describe("integration", function(){
 
     it("case#1", function(){
