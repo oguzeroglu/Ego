@@ -77,6 +77,22 @@ describe("StateMachine", function(){
     expect(stateMachine._transitionsByStateID).to.eql({});
   });
 
+  it("should not add state if the added state contains the state", function(){
+
+    var knowledge = new Ego.Knowledge();
+
+    var sm1 = new Ego.StateMachine("sm1", knowledge);
+    var sm2 = new Ego.StateMachine("sm2", knowledge);
+    var sm3 = new Ego.StateMachine("sm3", knowledge);
+
+    sm2.addState(sm1);
+
+    expect(sm1.addState(sm2)).to.eql(false);
+
+    sm1.addState(sm3);
+    expect(sm3.addState(sm2)).to.eql(false);
+  })
+
   it("should check if has state", function(){
 
     var knowledge = new Ego.Knowledge();

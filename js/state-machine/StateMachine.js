@@ -20,7 +20,7 @@ StateMachine.prototype.hasState = function(state){
   if (state.getID() == this.getID()){
     return true;
   }
-  
+
   var result = false;
   for (var stateID in this._statesByID){
     var curState = this._statesByID[stateID];
@@ -33,6 +33,11 @@ StateMachine.prototype.hasState = function(state){
 }
 
 StateMachine.prototype.addState = function(state){
+
+  if (state instanceof StateMachine && state.hasState(this)){
+    return false;
+  }
+
   if (state.setParent(this)){
     this._statesByID[state.getID()] = state;
     this._transitionsByStateID[state.getID()] = [];
