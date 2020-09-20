@@ -1,6 +1,6 @@
 {
   "name": "@oguz.eroglu/ego-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight decision making library for game AI.",
   "main": "build/Ego.js",
   "module": "build/Ego.mjs",
