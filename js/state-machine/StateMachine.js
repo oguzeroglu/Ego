@@ -16,6 +16,22 @@ var StateMachine = function(name, knowledge){
 
 StateMachine.prototype = Object.create(State.prototype);
 
+StateMachine.prototype.hasState = function(state){
+  if (state.getID() == this.getID()){
+    return true;
+  }
+  
+  var result = false;
+  for (var stateID in this._statesByID){
+    var curState = this._statesByID[stateID];
+    result = result || curState.getID() == state.getID();
+    if (curState instanceof StateMachine){
+      result = result || curState.hasState(state);
+    }
+  }
+  return result;
+}
+
 StateMachine.prototype.addState = function(state){
   if (state.setParent(this)){
     this._statesByID[state.getID()] = state;
