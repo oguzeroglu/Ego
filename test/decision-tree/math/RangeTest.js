@@ -92,4 +92,41 @@ describe("Range", function(){
     expect(range.testNumber(200)).to.eql(true);
     expect(range.testNumber(-85)).to.eql(true);
   });
+
+  it("should clone", function(){
+
+    var range1 = new Ego.Range(100, 300);
+    var range2 = new Ego.Range(-100, 500);
+    var range3 = new Ego.Range(200, 3000);
+    var range4 = new Ego.Range(-12.5, 13.5);
+
+    range1.makeLowerBoundExclusive();
+    range1.makeUpperBoundExclusive();
+
+    range2.makeLowerBoundExclusive();
+    range2.makeUpperBoundInclusive();
+
+    range3.makeLowerBoundInclusive();
+    range3.makeUpperBoundExclusive();
+
+    range4.makeLowerBoundInclusive();
+    range4.makeUpperBoundInclusive();
+
+    var range1Clone = range1.clone();
+    var range2Clone = range2.clone();
+    var range3Clone = range3.clone();
+    var range4Clone = range4.clone();
+
+    expect(range1).to.eql(range1Clone);
+    expect(range1 === range1Clone).to.eql(false);
+
+    expect(range2).to.eql(range2Clone);
+    expect(range2 === range2Clone).to.eql(false);
+
+    expect(range3).to.eql(range3Clone);
+    expect(range3 === range3Clone).to.eql(false);
+
+    expect(range4).to.eql(range4Clone);
+    expect(range4 === range4Clone).to.eql(false);
+  });
 });

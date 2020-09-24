@@ -6,6 +6,24 @@ var Range = function(lowerBound, upperBound){
   this._upperBound = upperBound;
 }
 
+Range.prototype.clone = function(){
+  var cloned = new Range(this._lowerBound, this._upperBound);
+
+  if (this._isLowerBoundInclusive){
+    cloned.makeLowerBoundInclusive();
+  }else{
+    cloned.makeLowerBoundExclusive();
+  }
+
+  if (this._isUpperBoundInclusive){
+    cloned.makeUpperBoundInclusive();
+  }else{
+    cloned.makeUpperBoundExclusive();
+  }
+
+  return cloned;
+}
+
 Range.prototype.makeLowerBoundInclusive = function(){
   this._isLowerBoundInclusive = true;
 }
