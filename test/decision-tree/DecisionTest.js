@@ -168,4 +168,32 @@ describe("Decision", function(){
     expect(catchedErr).not.to.eql(null);
     expect(catchedErr.message).to.eql("No such information in knowledge: stuff")
   });
+
+  it("should clone", function(){
+
+    var decision = new Ego.Decision("isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+
+    var cloned = decision.clone();
+
+    expect(decision).to.eql(cloned);
+    expect(decision === cloned).to.eql(false);
+    expect(decision._decisionMethod).to.eql(cloned._decisionMethod);
+    expect(decision._decisionMethod === cloned._decisionMethod).to.eql(false);
+
+    var decision2 = new Ego.Decision("age", Ego.InformationTypes.TYPE_NUMERICAL, new Ego.IsInRange(new Ego.Range(70, Infinity)));
+    var decision3 = new Ego.Decision("areYouOk", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+
+    decision.setYesNode(decision2);
+    decision.setNoNode(decision3);
+
+    decision2.setYesNode("You're old.");
+    decision2.setNoNode("You're not old.");
+
+    decision3.setYesNode("You're ok.");
+    decision3.setNoNode("You're not ok.");
+
+    cloned = decision.clone();
+    expect(decision).to.eql(cloned);
+    expect(decision === cloned).to.eql(false);
+  });
 });

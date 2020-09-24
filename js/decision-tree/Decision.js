@@ -13,6 +13,27 @@ var Decision = function(informationName, informationType, decisionMethod){
   this._noNode = null;
 }
 
+Decision.prototype.clone = function(){
+  var cloned = new Decision(this._informationName, this._informationType, this._decisionMethod.clone());
+
+  var yesNode = this.getYesNode();
+  var noNode = this.getNoNode();
+
+  if (yesNode instanceof Decision){
+    cloned.setYesNode(yesNode.clone());
+  }else{
+    cloned.setYesNode(yesNode);
+  }
+
+  if (noNode instanceof Decision){
+    cloned.setNoNode(noNode.clone());
+  }else{
+    cloned.setNoNode(noNode);
+  }
+
+  return cloned;
+}
+
 Decision.prototype.setYesNode = function(node){
   this._yesNode = node;
 }
