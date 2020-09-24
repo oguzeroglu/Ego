@@ -19,4 +19,8 @@ DecisionTree.prototype.makeDecision = function(knowledge){
   return currentNode;
 }
 
+DecisionTree.prototype.clone = function(){
+  return new DecisionTree(this._rootNode.clone());
+}
+
 export { DecisionTree };

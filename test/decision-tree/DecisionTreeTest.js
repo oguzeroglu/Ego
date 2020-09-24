@@ -25,6 +25,20 @@ describe("DecisionTree", function(){
     expect(catchedErr.message).to.eql("Root node must be an instance of Ego.Decision")
   });
 
+  it("should clone", function(){
+
+    var rootDecision = new Ego.Decision("isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+
+    var decisionTree = new Ego.DecisionTree(rootDecision);
+
+    var cloned = decisionTree.clone();
+
+    expect(decisionTree).to.eql(cloned);
+    expect(decisionTree === cloned).to.eql(false);
+    expect(decisionTree._rootNode).to.eql(cloned._rootNode);
+    expect(decisionTree._rootNode === cloned._rootNode).to.eql(false);
+  });
+
   describe("should make decision", function(){
 
     it("root node only", function(){
