@@ -61,4 +61,13 @@ describe("State", function(){
 
     expect(state.getName()).to.eql("testState");
   });
+
+  it("should clone", function(){
+
+    var state = new Ego.State("state1");
+    var cloned = state.clone();
+
+    expect(state.getName()).to.eql(cloned.getName());
+    expect(state === cloned).to.eql(false);
+  })
 });

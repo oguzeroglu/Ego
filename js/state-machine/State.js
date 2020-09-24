@@ -7,6 +7,10 @@ var State = function(name){
   this._parent = null;
 }
 
+State.prototype.clone = function(){
+  return new State(this.getName());
+}
+
 State.prototype.setParent = function(parent){
 
   if (this._parent){

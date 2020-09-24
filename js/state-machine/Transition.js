@@ -8,6 +8,25 @@ var Transition = function(source, target, infoName, infoType, decisionMethod){
 }
 Transition.prototype = Object.create(Decision.prototype);
 
+Transition.prototype.clone = function(overrideSource, overrideTarget, overrideKnowledge, idsObj){
+  var source = null;
+  var target = null;
+
+  if (overrideSource){
+    source = overrideSource;
+  }else{
+    source = this.getSourceNode().clone(overrideKnowledge || null, idsObj || null);
+  }
+
+  if (overrideTarget){
+    target = overrideTarget;
+  }else{
+    target = this.getTargetNode().clone(overrideKnowledge || null, idsObj || null);
+  }
+
+  return new Transition(source, target, this._informationName, this._informationType, this._decisionMethod.clone());
+}
+
 Transition.prototype.isPossible = function(knowledge){
   var decisionResult = this.make(knowledge);
 

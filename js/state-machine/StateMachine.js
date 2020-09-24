@@ -16,6 +16,39 @@ var StateMachine = function(name, knowledge){
 
 StateMachine.prototype = Object.create(State.prototype);
 
+StateMachine.prototype.clone = function(overrideKnowledge, idsObj){
+  var clonedStateMachine = new StateMachine(this.getName(), overrideKnowledge || this._knowledge.clone());
+
+  var clonedIDs = idsObj || {};
+
+  for (var stateID in this._statesByID){
+    var state = this._statesByID[stateID];
+    var cloned = clonedIDs[stateID] || state.clone(overrideKnowledge || null, clonedIDs);
+    clonedStateMachine.addState(cloned);
+    clonedIDs[stateID] = cloned;
+    if (this._entryState == state){
+      clonedStateMachine.setEntryState(cloned);
+    }
+  }
+
+  for (var stateID in this._transitionsByStateID){
+    var transitions = this._transitionsByStateID[stateID];
+    for (var i = 0; i < transitions.length; i ++){
+      var transition = transitions[i];
+      var source = transition.getSourceNode();
+      var target = transition.getTargetNode();
+      var overrideSource = clonedIDs[source.getID()] || null;
+      var overrideTarget = clonedIDs[target.getID()] || null;
+      var cloned = transition.clone(overrideSource, overrideTarget, overrideKnowledge || null, clonedIDs);
+      clonedStateMachine.addTransition(cloned);
+      clonedIDs[source.getID()] = cloned.getSourceNode();
+      clonedIDs[target.getID()] = cloned.getTargetNode();
+    }
+  }
+
+  return clonedStateMachine;
+}
+
 StateMachine.prototype.hasState = function(state){
   if (state.getID() == this.getID()){
     return true;

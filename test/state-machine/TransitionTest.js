@@ -62,4 +62,66 @@ describe("Transition", function(){
 
     expect(transition.isPossible(knowledge)).to.eql(false);
   });
+
+  it("should clone", function(){
+
+    var state1 = new Ego.State("state1");
+    var state2 = new Ego.State("state2");
+
+    var transition = new Ego.Transition(state1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+
+    var cloned = transition.clone();
+
+    expect(cloned instanceof Ego.Transition).to.eql(true);
+
+    expect(cloned._informationName).to.eql(transition._informationName);
+    expect(cloned._informationType).to.eql(transition._informationType);
+    expect(cloned._decisionMethod).to.eql(transition._decisionMethod);
+    expect(cloned.getYesNode().getName()).to.eql(transition.getYesNode().getName());
+    expect(cloned.getNoNode().getName()).to.eql(transition.getNoNode().getName());
+    expect(cloned.getYesNode() === transition.getYesNode()).to.eql(false);
+    expect(cloned.getNoNode() === transition.getNoNode()).to.eql(false);
+
+    cloned = transition.clone(state1);
+
+    expect(cloned._informationName).to.eql(transition._informationName);
+    expect(cloned._informationType).to.eql(transition._informationType);
+    expect(cloned._decisionMethod).to.eql(transition._decisionMethod);
+    expect(cloned.getYesNode().getName()).to.eql(transition.getYesNode().getName());
+    expect(cloned.getNoNode().getName()).to.eql(transition.getNoNode().getName());
+    expect(cloned.getYesNode() === transition.getYesNode()).to.eql(false);
+    expect(cloned.getNoNode() === transition.getNoNode()).to.eql(true);
+
+    cloned = transition.clone(null, state2);
+    expect(cloned._informationName).to.eql(transition._informationName);
+    expect(cloned._informationType).to.eql(transition._informationType);
+    expect(cloned._decisionMethod).to.eql(transition._decisionMethod);
+    expect(cloned.getYesNode().getName()).to.eql(transition.getYesNode().getName());
+    expect(cloned.getNoNode().getName()).to.eql(transition.getNoNode().getName());
+    expect(cloned.getYesNode() === transition.getYesNode()).to.eql(true);
+    expect(cloned.getNoNode() === transition.getNoNode()).to.eql(false);
+
+    cloned = transition.clone(state1, state2);
+    expect(cloned._informationName).to.eql(transition._informationName);
+    expect(cloned._informationType).to.eql(transition._informationType);
+    expect(cloned._decisionMethod).to.eql(transition._decisionMethod);
+    expect(cloned.getYesNode().getName()).to.eql(transition.getYesNode().getName());
+    expect(cloned.getNoNode().getName()).to.eql(transition.getNoNode().getName());
+    expect(cloned.getYesNode() === transition.getYesNode()).to.eql(true);
+    expect(cloned.getNoNode() === transition.getNoNode()).to.eql(true);
+
+    var sm1 = new Ego.StateMachine("sm1", new Ego.Knowledge())
+    var tmpState = new Ego.State("tmpState");
+    sm1.addState(tmpState);
+    sm1.setEntryState(tmpState)
+
+    var transition2 = new Ego.Transition(sm1, state2, "isStuffHappening", Ego.InformationTypes.TYPE_BOOLEAN, new Ego.IsTrue());
+    var newKnowledge = new Ego.Knowledge();
+
+    var obj = {};
+    cloned = transition2.clone(null, null, newKnowledge, obj);
+    expect(cloned.getSourceNode()._knowledge === newKnowledge).to.eql(true);
+    expect(Object.keys(obj).length).to.eql(1);
+    expect(cloned.getSourceNode()._entryState.getName()).to.eql("tmpState");
+  });
 });
