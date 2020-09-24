@@ -19,4 +19,14 @@ describe("IsFalse", function(){
     expect(isFalse.perform(123)).to.eql(false);
     expect(isFalse.perform({})).to.eql(false);
   });
+
+  it("should clone", function(){
+
+    var isFalse = new Ego.IsFalse();
+    var cloned = isFalse.clone();
+
+    expect(cloned instanceof Ego.IsFalse).to.eql(true);
+    expect(isFalse).to.eql(cloned);
+    expect(isFalse === cloned).to.eql(false);
+  });
 });

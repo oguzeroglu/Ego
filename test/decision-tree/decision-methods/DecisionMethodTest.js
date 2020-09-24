@@ -25,4 +25,25 @@ describe("DecisionMethod", function(){
 
     expect(decisionMethod.perform()).to.eql(true);
   });
+
+  it("should clone", function(){
+
+    var decisionMethod = new Ego.DecisionMethod(300);
+    var cloned = decisionMethod.clone();
+
+    expect(decisionMethod).to.eql(cloned);
+    expect(decisionMethod === cloned).to.eql(false);
+
+    var called = false;
+    decisionMethod = new Ego.DecisionMethod({clone: function(){
+      called = true;
+      return this;
+    }});
+
+    cloned = decisionMethod.clone();
+
+    expect(decisionMethod).to.eql(cloned);
+    expect(decisionMethod === cloned).to.eql(false);
+    expect(called).to.eql(true);
+  });
 });

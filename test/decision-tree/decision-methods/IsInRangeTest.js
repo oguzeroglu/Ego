@@ -37,4 +37,17 @@ describe("IsInRange", function(){
     expect(isInRange.perform(vec2)).to.equal(false);
     expect(isInRange.perform(vec3)).to.equal(false);
   });
+
+  it("should clone", function(){
+
+    var range = new Ego.Range(10, 30);
+    var isInRange = new Ego.IsInRange(range);
+    var cloned = isInRange.clone();
+
+    expect(cloned instanceof Ego.IsInRange).to.eql(true);
+    expect(cloned._parameter).to.eql(range);
+    expect(cloned._parameter === range).to.eql(false);
+    expect(isInRange).to.eql(cloned);
+    expect(isInRange === cloned).to.eql(false);
+  });
 });
