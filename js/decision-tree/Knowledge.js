@@ -4,6 +4,25 @@ var Knowledge = function(){
   this._vectorMap = {};
 }
 
+Knowledge.prototype.clone = function(){
+  var cloned = new Knowledge();
+
+  for (var infoName in this._booleanMap){
+    cloned.addBooleanInformation(infoName, this.getBooleanInformation(infoName));
+  }
+
+  for (var infoName in this._numericalMap){
+    cloned.addNumericalInformation(infoName, this.getNumericalInformation(infoName));
+  }
+
+  for (var infoName in this._vectorMap){
+    var vect = this.getVectorInformation(infoName);
+    cloned.addVectorInformation(infoName, vect.x, vect.y, vect.z);
+  }
+
+  return cloned;
+}
+
 Knowledge.prototype.addBooleanInformation = function(name, booleanValue){
   if (this._hasBooleanInformation(name)){
     return false;

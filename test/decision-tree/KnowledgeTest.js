@@ -169,4 +169,20 @@ describe("Knowledge", function(){
     expect(knowledge.getVectorInformation("position")).to.eql(null);
     expect(knowledge.deleteVectorInformation("position")).to.eql(false);
   });
+
+  it("should clone", function(){
+    var knowledge = new Ego.Knowledge();
+
+    knowledge.addBooleanInformation("isStuffHappening", true);
+    knowledge.addNumericalInformation("myAge", 27);
+    knowledge.addVectorInformation("dist", 100, 200, 300.5);
+
+    var cloned = knowledge.clone();
+
+    expect(knowledge.getBooleanInformation("isStuffHappening")).to.eql(cloned.getBooleanInformation("isStuffHappening"));
+    expect(knowledge.getNumericalInformation("myAge")).to.eql(cloned.getNumericalInformation("myAge"));
+    expect(knowledge.getVectorInformation("dist")).to.eql(cloned.getVectorInformation("dist"));
+    expect(knowledge).to.eql(cloned);
+    expect(knowledge === cloned).to.eql(false);
+  })
 });
